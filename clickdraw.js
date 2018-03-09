@@ -22,31 +22,34 @@ var clearCallBack = function(e){
 }
 
 //creates a circle object w builtin fxns
-var drawDot = function(x, y, r){
+var drawDot = function(x, y, r, fill){
     var c = {
-	circle: document.createElementNS("http://www.w3.org/2000/svg", "circle"),
-	append: function(){
-	    svg.appendChild(this.circle);
-	},
-	changeColor: function(e){
-	    if(this.getAttribute("fill") == "red"){
-		this.setAttribute("fill", "blue");
-	    }
-	    else{
-		console.log("delete");
-		svg.removeChild(this);
-		rX = Math.random() * (width - 10);
-		rY = Math.random() * (height - 10);
-		svg.appendChild(drawDot(rX, rY, 20).circle);
-	    }
-	    e.stopPropagation();
-	}
-	
+        cx: x,
+        cy: y,
+        cr: r,
+        cfill: fill,
+        circle: document.createElementNS("http://www.w3.org/2000/svg", "circle"),
+        append: function(){
+            svg.appendChild(this.circle);
+        },
+        changeColor: function(e){
+            if(this.getAttribute("fill") == "red"){
+                this.setAttribute("fill", "blue");
+            }
+            else{
+                console.log("delete");
+                svg.removeChild(this);
+                rX = Math.random() * (width - 10);
+                rY = Math.random() * (height - 10);
+                svg.appendChild(drawDot(rX, rY, 20, "red").circle);
+            }
+            e.stopPropagation();
+        }
     }
-    c.circle.setAttribute("cx", x);
-    c.circle.setAttribute("cy", y);
-    c.circle.setAttribute("r", r);
-    c.circle.setAttribute("fill", "red");
+    c.circle.setAttribute("cx", c.cx);
+    c.circle.setAttribute("cy", c.cy);
+    c.circle.setAttribute("r", c.cr);
+    c.circle.setAttribute("fill", c.cfill);
     c.circle.setAttribute("stroke", "black");
     c.circle.addEventListener("click", c.changeColor);
     return c;
@@ -54,7 +57,7 @@ var drawDot = function(x, y, r){
 
 //when clicked
 var circle = function(e){
-    var c = drawDot(e.offsetX, e.offsetY, 20);
+    var c = drawDot(e.offsetX, e.offsetY, 20, "red");
     c.append();
     e.stopPropagation();
 }
